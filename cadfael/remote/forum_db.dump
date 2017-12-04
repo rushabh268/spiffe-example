@@ -1,0 +1,595 @@
+-- MySQL dump 10.15  Distrib 10.0.31-MariaDB, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: forum_db
+-- ------------------------------------------------------
+-- Server version	10.0.31-MariaDB-0ubuntu0.16.04.2
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `alembic_version`
+--
+
+DROP TABLE IF EXISTS `alembic_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `alembic_version` (
+  `version_num` varchar(32) NOT NULL,
+  PRIMARY KEY (`version_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `alembic_version`
+--
+
+LOCK TABLES `alembic_version` WRITE;
+/*!40000 ALTER TABLE `alembic_version` DISABLE KEYS */;
+INSERT INTO `alembic_version` VALUES ('d0ffadc3ea48');
+/*!40000 ALTER TABLE `alembic_version` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categories`
+--
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'My Category',NULL,1);
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `conversations`
+--
+
+DROP TABLE IF EXISTS `conversations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `conversations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `from_user_id` int(11) DEFAULT NULL,
+  `to_user_id` int(11) DEFAULT NULL,
+  `shared_id` binary(16) NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `date_created` datetime NOT NULL,
+  `trash` tinyint(1) NOT NULL,
+  `draft` tinyint(1) NOT NULL,
+  `unread` tinyint(1) NOT NULL,
+  `date_modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `from_user_id` (`from_user_id`),
+  KEY `to_user_id` (`to_user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `conversations_ibfk_1` FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `conversations_ibfk_2` FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `conversations_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `conversations`
+--
+
+LOCK TABLES `conversations` WRITE;
+/*!40000 ALTER TABLE `conversations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `conversations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forumgroups`
+--
+
+DROP TABLE IF EXISTS `forumgroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forumgroups` (
+  `group_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `forumgroups_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forumgroups`
+--
+
+LOCK TABLES `forumgroups` WRITE;
+/*!40000 ALTER TABLE `forumgroups` DISABLE KEYS */;
+INSERT INTO `forumgroups` VALUES (1,1),(5,1),(6,1),(4,1),(3,1),(2,1);
+/*!40000 ALTER TABLE `forumgroups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forums`
+--
+
+DROP TABLE IF EXISTS `forums`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forums` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text,
+  `position` int(11) NOT NULL,
+  `locked` tinyint(1) NOT NULL,
+  `show_moderators` tinyint(1) NOT NULL,
+  `external` varchar(200) DEFAULT NULL,
+  `post_count` int(11) NOT NULL,
+  `topic_count` int(11) NOT NULL,
+  `last_post_id` int(11) DEFAULT NULL,
+  `last_post_title` varchar(255) DEFAULT NULL,
+  `last_post_user_id` int(11) DEFAULT NULL,
+  `last_post_username` varchar(255) DEFAULT NULL,
+  `last_post_created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  KEY `last_post_id` (`last_post_id`),
+  KEY `last_post_user_id` (`last_post_user_id`),
+  CONSTRAINT `forums_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  CONSTRAINT `forums_ibfk_2` FOREIGN KEY (`last_post_id`) REFERENCES `posts` (`id`),
+  CONSTRAINT `forums_ibfk_3` FOREIGN KEY (`last_post_user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forums`
+--
+
+LOCK TABLES `forums` WRITE;
+/*!40000 ALTER TABLE `forums` DISABLE KEYS */;
+INSERT INTO `forums` VALUES (1,1,'Welcome','Your first forum',1,0,0,NULL,1,1,1,'Welcome!',1,'admin','2017-10-06 14:14:17');
+/*!40000 ALTER TABLE `forums` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forumsread`
+--
+
+DROP TABLE IF EXISTS `forumsread`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forumsread` (
+  `user_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  `last_read` datetime NOT NULL,
+  `cleared` datetime DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`forum_id`),
+  CONSTRAINT `forumsread_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forumsread`
+--
+
+LOCK TABLES `forumsread` WRITE;
+/*!40000 ALTER TABLE `forumsread` DISABLE KEYS */;
+/*!40000 ALTER TABLE `forumsread` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `admin` tinyint(1) NOT NULL,
+  `super_mod` tinyint(1) NOT NULL,
+  `mod` tinyint(1) NOT NULL,
+  `guest` tinyint(1) NOT NULL,
+  `banned` tinyint(1) NOT NULL,
+  `mod_edituser` tinyint(1) NOT NULL,
+  `mod_banuser` tinyint(1) NOT NULL,
+  `editpost` tinyint(1) NOT NULL,
+  `deletepost` tinyint(1) NOT NULL,
+  `deletetopic` tinyint(1) NOT NULL,
+  `posttopic` tinyint(1) NOT NULL,
+  `postreply` tinyint(1) NOT NULL,
+  `makehidden` tinyint(1) NOT NULL,
+  `viewhidden` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups`
+--
+
+LOCK TABLES `groups` WRITE;
+/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
+INSERT INTO `groups` VALUES (1,'Administrator','The Administrator Group',1,0,0,0,0,1,1,1,1,1,1,1,1,1),(2,'Super Moderator','The Super Moderator Group',0,1,0,0,0,1,1,1,1,1,1,1,1,1),(3,'Moderator','The Moderator Group',0,0,1,0,0,1,1,1,1,1,1,1,0,1),(4,'Member','The Member Group',0,0,0,0,0,0,0,1,0,0,1,1,0,0),(5,'Banned','The Banned Group',0,0,0,0,1,0,0,0,0,0,0,0,0,0),(6,'Guest','The Guest Group',0,0,0,1,0,0,0,0,0,0,0,0,0,0);
+/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups_users`
+--
+
+DROP TABLE IF EXISTS `groups_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups_users` (
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  KEY `group_id` (`group_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `groups_users_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
+  CONSTRAINT `groups_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups_users`
+--
+
+LOCK TABLES `groups_users` WRITE;
+/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `conversation_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `conversation_id` (`conversation_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`conversation_id`) REFERENCES `conversations` (`id`),
+  CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `messages`
+--
+
+LOCK TABLES `messages` WRITE;
+/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `moderators`
+--
+
+DROP TABLE IF EXISTS `moderators`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `moderators` (
+  `user_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `moderators_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `moderators`
+--
+
+LOCK TABLES `moderators` WRITE;
+/*!40000 ALTER TABLE `moderators` DISABLE KEYS */;
+/*!40000 ALTER TABLE `moderators` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `topic_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `username` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `date_created` datetime NOT NULL,
+  `date_modified` datetime DEFAULT NULL,
+  `modified_by` varchar(200) DEFAULT NULL,
+  `hidden` tinyint(1) NOT NULL,
+  `hidden_at` datetime DEFAULT NULL,
+  `hidden_by_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `fk_Post_hidden_by` (`hidden_by_id`),
+  CONSTRAINT `fk_Post_hidden_by` FOREIGN KEY (`hidden_by_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+INSERT INTO `posts` VALUES (1,1,1,'admin','Have fun with your new FlaskBB Forum!','2017-10-06 14:14:17',NULL,NULL,0,NULL,NULL);
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reports`
+--
+
+DROP TABLE IF EXISTS `reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reporter_id` int(11) DEFAULT NULL,
+  `reported` datetime NOT NULL,
+  `post_id` int(11) DEFAULT NULL,
+  `zapped` datetime DEFAULT NULL,
+  `zapped_by` int(11) DEFAULT NULL,
+  `reason` text,
+  PRIMARY KEY (`id`),
+  KEY `post_id` (`post_id`),
+  KEY `reporter_id` (`reporter_id`),
+  KEY `zapped_by` (`zapped_by`),
+  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
+  CONSTRAINT `reports_ibfk_2` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `reports_ibfk_3` FOREIGN KEY (`zapped_by`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reports`
+--
+
+LOCK TABLES `reports` WRITE;
+/*!40000 ALTER TABLE `reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `key` varchar(255) NOT NULL,
+  `value` blob NOT NULL,
+  `settingsgroup` varchar(255) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `description` text NOT NULL,
+  `value_type` varchar(20) NOT NULL,
+  `extra` blob,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settings`
+--
+
+LOCK TABLES `settings` WRITE;
+/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES ('activate_account','€ˆ.','auth','Enable Account Activation','Enable to let the user activate their account by sending a email with an activation link.','boolean','€X\0\0\0\0.'),('auth_ratelimit_enabled','€ˆ.','auth','Enable Auth Rate Limiting','Enable rate limiting on \'auth\' routes. This will limit the amount of requests per minute to a given amount and time.','boolean','€X\0\0\0\0.'),('auth_requests','€K.','auth','Auth Requests','Number of requests on each \'auth\' route before the user has to wait a given timeout until he can access the resource again.','integer','€}qUminqKs.'),('auth_timeout','€K.','auth','Auth Timeout','The timeout for how long the user has to wait until he can access the resource again (in minutes).','integer','€}qUminqK\0s.'),('auth_username_blacklist','€U\Zme,administrator,moderatorq.','auth','Username Blacklist','A comma seperated list with forbidden usernames.','string','€X\0\0\0\0.'),('auth_username_max_length','€K.','auth','Username Maximum Length','The Maximum length of the username. Changing this will only affect new registrations.','integer','€}qUminqK\0s.'),('auth_username_min_length','€K.','auth','Username Minimum Length','The minimum length of the username. Changing this will only affect new registrations.','integer','€}qUminqK\0s.'),('avatar_height','€K–.','misc','Avatar Height','The allowed height of an avatar in pixels.','integer','€}qUminqK\0s.'),('avatar_size','€KÈ.','misc','Avatar Size','The allowed size of the avatar in kilobytes.','integer','€}qUminqK\0s.'),('avatar_types','€]q(UPNGqUJPEGqUGIFqe.','misc','Avatar Types','The allowed types of an avatar. Such as JPEG, GIF or PNG.','selectmultiple','€}qUchoicesqcflaskbb.fixtures.settings\navailable_avatar_types\nqs.'),('avatar_width','€K–.','misc','Avatar Width','The allowed width of an avatar in pixels.','integer','€}qUminqK\0s.'),('default_language','€Uenq.','appearance','Default Language','Change the default language for your forum.','select','€}qUchoicesqcflaskbb.utils.helpers\nget_available_languages\nqs.'),('default_theme','€Uauroraq.','appearance','Default Theme','Change the default theme for your forum.','select','€}qUchoicesqcflaskbb.utils.helpers\nget_available_themes\nqs.'),('login_recaptcha','€K.','auth','Login reCAPTCHA','Use a CAPTCHA after a specified amount of failed login attempts.','integer','€}qUminqK\0s.'),('message_quota','€K2.','misc','Private Message Quota','The amount of messages a user can have.','integer','€}qUminqK\0s.'),('online_last_minutes','€K.','misc','Online last minutes','How long a user can be inactive before he is marked as offline. 0 to disable it.','integer','€}qUminqK\0s.'),('posts_per_page','€K\n.','general','Posts per page','Number of posts displayed per page.','integer','€}qUminqKs.'),('project_subtitle','€U%A lightweight forum software in Flaskq.','general','Project subtitle','A short description of the project.','string','€X\0\0\0\0.'),('project_title','€UFlaskBBq.','general','Project title','The title of the project.','string','€X\0\0\0\0.'),('recaptcha_enabled','€‰.','auth','Enable reCAPTCHA','Helps to prevent bots from creating accounts. For more information visit this link: <a href=http://www.google.com/recaptcha>http://www.google.com/recaptcha</a>','boolean','€X\0\0\0\0.'),('recaptcha_private_key','€U\0.','auth','reCAPTCHA Secret Key','The private key (\'Secret key\'). Keep this a secret!','string','€X\0\0\0\0.'),('recaptcha_public_key','€U\0.','auth','reCAPTCHA Site Key','Your public recaptcha key (\'Site key\').','string','€X\0\0\0\0.'),('registration_enabled','€ˆ.','auth','Enable Registration','Enable or disable the registration','boolean','€X\0\0\0\0.'),('signature_enabled','€ˆ.','misc','Enable Signatures','Enable signatures in posts.','boolean','€}q.'),('title_length','€K.','misc','Topic title length','The length of the topic title shown on the index.','integer','€}qUminqK\0s.'),('topics_per_page','€K\n.','general','Topics per page','Number of topics displayed per page.','integer','€}qUminqKs.'),('tracker_length','€K.','misc','Tracker length','The days for how long the forum should deal with unread topics. 0 to disable it.','integer','€}qUminqK\0s.'),('users_per_page','€K\n.','general','Users per page','Number of users displayed per page.','integer','€}qUminqKs.');
+/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `settingsgroup`
+--
+
+DROP TABLE IF EXISTS `settingsgroup`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settingsgroup` (
+  `key` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `settingsgroup`
+--
+
+LOCK TABLES `settingsgroup` WRITE;
+/*!40000 ALTER TABLE `settingsgroup` DISABLE KEYS */;
+INSERT INTO `settingsgroup` VALUES ('appearance','Appearance Settings','Change the theme and language for your forum.'),('auth','Authentication Settings','Configurations for the Login and Register process.'),('general','General Settings','How many items per page are displayed.'),('misc','Misc Settings','Miscellaneous settings.');
+/*!40000 ALTER TABLE `settingsgroup` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topics`
+--
+
+DROP TABLE IF EXISTS `topics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `forum_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `username` varchar(200) NOT NULL,
+  `date_created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  `locked` tinyint(1) NOT NULL,
+  `important` tinyint(1) NOT NULL,
+  `views` int(11) NOT NULL,
+  `post_count` int(11) NOT NULL,
+  `first_post_id` int(11) DEFAULT NULL,
+  `last_post_id` int(11) DEFAULT NULL,
+  `hidden` tinyint(1) NOT NULL,
+  `hidden_at` datetime DEFAULT NULL,
+  `hidden_by_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `first_post_id` (`first_post_id`),
+  KEY `last_post_id` (`last_post_id`),
+  KEY `user_id` (`user_id`),
+  KEY `fk_Topic_hidden_by` (`hidden_by_id`),
+  CONSTRAINT `fk_Topic_hidden_by` FOREIGN KEY (`hidden_by_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `topics_ibfk_1` FOREIGN KEY (`first_post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `topics_ibfk_2` FOREIGN KEY (`last_post_id`) REFERENCES `posts` (`id`),
+  CONSTRAINT `topics_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topics`
+--
+
+LOCK TABLES `topics` WRITE;
+/*!40000 ALTER TABLE `topics` DISABLE KEYS */;
+INSERT INTO `topics` VALUES (1,1,'Welcome!',1,'admin','2017-10-06 14:14:17','2017-10-06 14:14:17',0,0,0,1,1,1,0,NULL,NULL);
+/*!40000 ALTER TABLE `topics` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topicsread`
+--
+
+DROP TABLE IF EXISTS `topicsread`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topicsread` (
+  `user_id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  `last_read` datetime NOT NULL,
+  PRIMARY KEY (`user_id`,`topic_id`,`forum_id`),
+  CONSTRAINT `topicsread_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topicsread`
+--
+
+LOCK TABLES `topicsread` WRITE;
+/*!40000 ALTER TABLE `topicsread` DISABLE KEYS */;
+/*!40000 ALTER TABLE `topicsread` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `topictracker`
+--
+
+DROP TABLE IF EXISTS `topictracker`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `topictracker` (
+  `user_id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `topictracker_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `topictracker`
+--
+
+LOCK TABLES `topictracker` WRITE;
+/*!40000 ALTER TABLE `topictracker` DISABLE KEYS */;
+/*!40000 ALTER TABLE `topictracker` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL,
+  `password` varchar(120) NOT NULL,
+  `date_joined` datetime NOT NULL,
+  `lastseen` datetime DEFAULT NULL,
+  `birthday` datetime DEFAULT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `website` varchar(200) DEFAULT NULL,
+  `location` varchar(100) DEFAULT NULL,
+  `signature` text,
+  `avatar` varchar(200) DEFAULT NULL,
+  `notes` text,
+  `theme` varchar(15) DEFAULT NULL,
+  `language` varchar(15) DEFAULT NULL,
+  `post_count` int(11) DEFAULT NULL,
+  `primary_group_id` int(11) NOT NULL,
+  `activated` tinyint(1) NOT NULL,
+  `last_failed_login` datetime DEFAULT NULL,
+  `login_attempts` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`),
+  KEY `primary_group_id` (`primary_group_id`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`primary_group_id`) REFERENCES `groups` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'admin','admin@example.com','pbkdf2:sha256:50000$kfZToYEK$ac3e516acee3b319447820f04af95867ae59358d0ef825568fd2c6ed9cf31405','2017-10-06 14:14:16','2017-10-06 14:14:16',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'en',1,1,1,NULL,0);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-10-06 14:15:12

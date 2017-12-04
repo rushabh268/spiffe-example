@@ -8,3 +8,8 @@
 
 /vagrant_k8s/admin.conf
 /beatrice/blog/container_ghostunnel/ghostunnel
+
+terraform.tfstate
+terraform.tfstate.backup
+demo_ssh_key
+demo_ssh_key.pub

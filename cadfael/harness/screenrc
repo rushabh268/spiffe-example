@@ -1,0 +1,40 @@
+
+screen -t server bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_SERVER"
+sleep 1 
+screen -t server bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_SERVER"
+screen -t blog bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_BLOG"
+sleep 1
+screen -t blog bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_BLOG"
+screen -t database bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_DATABASE"
+sleep 1
+screen -t database bash -c "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i $SSH_PRIV_KEY ubuntu@$PUBLIC_IP_DATABASE"
+
+mousetrack on
+rendition so wb
+caption string "%n %t"
+
+split -v
+focus right
+split
+focus down
+split
+focus left
+split
+focus up
+split
+focus up
+
+select 0
+focus right
+select 1
+focus down
+select 3
+focus down
+select 5
+focus left
+select 4
+focus up
+select 2
+
+
+
