@@ -4,20 +4,21 @@ This repository contains infrastructure for development and demos as well as aut
  
 ## Demonstrations
 
-**[simple_verification](simple_verification) - Simple Verification with Ghostunnel**
+**[simple_verification](simple_verification) - SVID Verification with Ghostunnel**
 
 This demo shows a Ghostunnel connection validating SPIFFE certificates.
 
 **[rosemary](rosemary) - UNIX Attestation and Ghostunnel Verification**
 
-Demonstrates two workloads communicating over Ghostunnel using SVIDs generated through UNIX attestation by UID. 
+Demonstrates two workloads communicating over mutually authenticated Ghostunnel using SVIDs generated through UNIX attestation by UID. 
 
 **[beatrice](beatrice) - Kubernetes Attestation and Ghostunnel verification**
-Demonstrates two workloads communicating over Ghostunnel using SVIDs automatically provistioned to an attested Kubernetres Pod. 
+
+Demonstrates two workloads communicating over mutually authenticated Ghostunnel endpoints using SVIDs automatically provistioned to an attested Kubernetres Pod. 
 
 **[cadfael](cadfael) - AWS Attestation and Envoy Verification**
 
-Demonstrates two workloads communicating via Envoy using SVIDs generated through AWS instance attestation. 
+Demonstrates two workloads communicating via mutually authenticated Envoys using SVIDs generated through AWS instance attestation. 
 
 ## Infrastructure
 
