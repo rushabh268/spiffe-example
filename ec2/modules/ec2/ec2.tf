@@ -1,6 +1,7 @@
 variable "availability_zone" {}
 variable "ami" {}
 variable "name" {}
+variable "demo_role" {}
 variable "instance_type" {}
 variable "subnet_id" {}
 variable "vpc_security_group_ids" { type = "list" }
@@ -39,7 +40,7 @@ resource "aws_instance" "server" {
 		}
 	    inline = [
 			"chmod -R a+x /tmp/${basename(var.script_dir)}/",
-			"/tmp/${basename(var.script_dir)}/provision_${var.name}.sh"
+			"/tmp/${basename(var.script_dir)}/provision_${var.demo_role}.sh"
 		]
 	}
 }

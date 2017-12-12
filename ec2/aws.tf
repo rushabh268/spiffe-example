@@ -13,11 +13,16 @@ provider "aws" {
     region = "${var.REGION}"
 }
 
+resource "random_pet" "demo" {
+    prefix = "spire_demo"
+    separator = "_"
+}
+
 resource "aws_vpc" "root" {
 	cidr_block = "${var.CIDR}"
 	enable_dns_support = "true"
 	enable_dns_hostnames = "true"
-	tags { Name = "spire_demo vpc" }
+	tags { Name = "${random_pet.demo.id} vpc" }
 }
 
 resource "aws_subnet" "public" {
@@ -25,17 +30,17 @@ resource "aws_subnet" "public" {
 	cidr_block = "${var.CIDR}"
 	availability_zone = "${var.REGION}${var.AZ}"
 	map_public_ip_on_launch = true
-	tags { Name = "spire_demo subnet public" }
+	tags { Name = "${random_pet.demo.id} subnet public" }
 }
 
 resource "aws_internet_gateway" "public" {
 	vpc_id = "${aws_vpc.root.id}"
-	tags { Name = "spire_demo igw" }
+	tags { Name = "${random_pet.demo.id} igw" }
 }
 
 resource "aws_route_table" "public" {
 	vpc_id = "${aws_vpc.root.id}"
-	tags { Name = "spire_demo rt public" }
+	tags { Name = "${random_pet.demo.id} rt public" }
 }
 
 resource "aws_route" "public_default" {
@@ -50,10 +55,10 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_security_group" "default" {
-    name = "spire-demo-default"
-    description = "spire_demo default sg"
+    name = "${random_pet.demo.id}_default"
+    description = "${random_pet.demo.id} default sg"
     vpc_id = "${aws_vpc.root.id}"
-    tags { Name = "spire_demo default sg" }
+    tags { Name = "${random_pet.demo.id} default sg" }
 }
 
 resource "aws_security_group_rule" "self" {
@@ -93,7 +98,7 @@ resource "aws_security_group_rule" "egress" {
 }
 
 resource "aws_key_pair" "demo" {
-  key_name   = "spire_demo-key"
+  key_name   = "${random_pet.demo.id}_key"
   public_key = "${file(var.SSH_PUB_KEY)}"
 }
 
@@ -128,7 +133,7 @@ data "aws_iam_policy_document" "instance-assume-role-policy" {
 }
 
 resource "aws_iam_role" "instance" {
-    name = "spire_demo_instance_role"
+    name = "${random_pet.demo.id}_instance_role"
     assume_role_policy = "${data.aws_iam_policy_document.instance-assume-role-policy.json}"
 }
 
@@ -139,13 +144,14 @@ resource "aws_iam_role_policy" "instance" {
 }
 
 resource "aws_iam_instance_profile" "instance" {
-    name = "spire_demo_instance_profile"
+    name = "${random_pet.demo.id}_instance_profile"
     role = "${aws_iam_role.instance.name}"
 }
 
 module "blog" {
     source = "modules/ec2"
-    name = "spire_demo_blog" 
+    name = "${random_pet.demo.id}_blog" 
+    demo_role = "blog"
 	private_ip = "${var.PRIVATE_IP_BLOG}"
 	script_dir = "${var.SCRIPT_DIR}"
 	key_name = "${aws_key_pair.demo.key_name}"
@@ -160,7 +166,8 @@ module "blog" {
 
 module "database" {
     source = "modules/ec2"
-    name = "spire_demo_database"
+    name = "${random_pet.demo.id}_database"
+    demo_role = "database"
 	private_ip = "${var.PRIVATE_IP_DATABASE}"
 	script_dir = "${var.SCRIPT_DIR}"
 	key_name = "${aws_key_pair.demo.key_name}"
@@ -175,7 +182,8 @@ module "database" {
 
 module "server" {
     source = "modules/ec2"
-    name = "spire_demo_server"
+    name = "${random_pet.demo.id}_server"
+    demo_role = "server"
 	private_ip = "${var.PRIVATE_IP_SERVER}"
 	script_dir = "${var.SCRIPT_DIR}"
 	key_name = "${aws_key_pair.demo.key_name}"
