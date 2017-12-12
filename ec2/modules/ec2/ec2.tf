@@ -8,6 +8,7 @@ variable "private_ip" {}
 variable "key_name" {}
 variable "private_key" {}
 variable "script_dir" {}
+variable "iam_instance_profile" {}
 
 resource "aws_instance" "server" {
     tags { Name = "${var.name}" }
@@ -18,6 +19,7 @@ resource "aws_instance" "server" {
     availability_zone = "${var.availability_zone}"
     subnet_id = "${var.subnet_id}"
     vpc_security_group_ids =  [ "${var.vpc_security_group_ids}" ]
+	iam_instance_profile = "${var.iam_instance_profile}"
     associate_public_ip_address = true
 
 	provisioner "file" {

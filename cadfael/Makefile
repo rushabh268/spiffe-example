@@ -5,7 +5,7 @@ up:
 	cd ../ec2 && ./tf.sh apply
 
 env:
-	cd ../ec2 && ./tf.sh env
+	@cd ../ec2 && ./tf.sh env
 
 destroy:
 	cd ../ec2 && ./tf.sh destroy -force

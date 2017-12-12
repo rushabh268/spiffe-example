@@ -110,6 +110,39 @@ data "aws_ami" "ubuntu" {
     owners = ["099720109477"] # Canonical
 }
 
+data "aws_iam_policy_document" "instance-policy" {
+    statement {
+        actions = [ "ec2:Describe*" ]
+        resources = [ "*" ]
+    }
+}
+
+data "aws_iam_policy_document" "instance-assume-role-policy" {
+    statement {
+        actions = ["sts:AssumeRole"]
+        principals {
+            type = "Service"
+            identifiers = ["ec2.amazonaws.com"]
+        }
+    }
+}
+
+resource "aws_iam_role" "instance" {
+    name = "spire_demo_instance_role"
+    assume_role_policy = "${data.aws_iam_policy_document.instance-assume-role-policy.json}"
+}
+
+resource "aws_iam_role_policy" "instance" {
+    name = "spie_demo_instance_policy"
+    role = "${aws_iam_role.instance.id}"
+    policy = "${data.aws_iam_policy_document.instance-policy.json}"
+}
+
+resource "aws_iam_instance_profile" "instance" {
+    name = "spire_demo_instance_profile"
+    role = "${aws_iam_role.instance.name}"
+}
+
 module "blog" {
     source = "modules/ec2"
     name = "spire_demo_blog" 
@@ -122,6 +155,7 @@ module "blog" {
 	subnet_id = "${aws_subnet.public.id}"
 	vpc_security_group_ids =  [ "${aws_security_group.default.id}" ]
 	private_key = "${var.SSH_PRIV_KEY}"
+	iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
 }
 
 module "database" {
@@ -136,6 +170,7 @@ module "database" {
 	subnet_id = "${aws_subnet.public.id}"
 	vpc_security_group_ids =  [ "${aws_security_group.default.id}" ]
 	private_key = "${var.SSH_PRIV_KEY}"
+	iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
 }
 
 module "server" {
@@ -150,6 +185,7 @@ module "server" {
 	subnet_id = "${aws_subnet.public.id}"
 	vpc_security_group_ids =  [ "${aws_security_group.default.id}" ]
 	private_key = "${var.SSH_PRIV_KEY}"
+	iam_instance_profile = "${aws_iam_instance_profile.instance.id}"
 }
 
 output "public_ip_blog" { value = "${module.blog.public_ip}" }
