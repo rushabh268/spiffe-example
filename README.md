@@ -1,7 +1,33 @@
 # SPIFFE examples 
+
+This repository contains infrastructure for development and demos as well as automated demos for each SPIRE release
  
-### [Simple Verification](simple_verification/README.md)
+## Demonstrations
+
+**[simple_verification](simple_verification) - Simple Verification with Ghostunnel**
+
 This demo shows a Ghostunnel connection validating SPIFFE certificates.
 
-### [Workload Attestation](rosemary/README.md)
-Demonstrates two workloads communicating over Ghostunnel using SVIDs generated through SPIRE deployment. 
+**[rosemary](rosemary) - UNIX Attestation and Ghostunnel Verification**
+
+Demonstrates two workloads communicating over Ghostunnel using SVIDs generated through UNIX attestation by UID. 
+
+**[beatrice](beatrice) - Kubernetes Attestation and Ghostunnel verification**
+Demonstrates two workloads communicating over Ghostunnel using SVIDs automatically provistioned to an attested Kubernetres Pod. 
+
+**[cadfael](cadfael) - AWS Attestation and Envoy Verification**
+
+Demonstrates two workloads communicating via Envoy using SVIDs generated through AWS instance attestation. 
+
+## Infrastructure
+
+**[vagrant_k8s](vagrant_k8s) - Local Kubernetes with Vagrant**
+
+Creates a Kubernets master and >=1 node in seperate Vagrant VMs.
+
+**[vagrant_db](vagrant_db) - Local MariaDB "bare metal" with Vagrant**
+
+**[ec2](ec2) - AWS EC2 with Terraform**
+
+Provisions a VPC with three EC2 instances with proper IAM instance roles for the aws-resolver plugin.
+
