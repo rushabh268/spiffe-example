@@ -6,10 +6,12 @@ mode="$1"
 
 SPIRE_TGZ="https://github.com/spiffe/spire/releases/download/0.2/spire-0.2-linux-x86_64-glibc.tar.gz"
 AWS_IID_TGZ="https://github.com/spiffe/aws-iid-attestor/releases/download/0.1/nodeattestor-aws_iid_0.1_linux_x86_64.tar.gz"
+AWS_RES_TGZ="https://github.com/spiffe/aws-resolver/releases/download/0.1/noderesolver-aws_0.1_linux_x86_64.tar.gz"
 
 sudo rm -rf /opt/spire*
 curl --silent --location $SPIRE_TGZ | sudo tar --directory /opt -xzf -
 curl --silent --location $AWS_IID_TGZ | sudo tar --directory /opt/spire* -xzf -
+curl --silent --location $AWS_RES_TGZ | sudo tar --directory /opt/spire* -xzf -
 
 cd /opt
 sudo ln -s spire-* spire

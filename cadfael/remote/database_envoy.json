@@ -1,0 +1,40 @@
+{
+  "listeners": [{
+    "address": "tcp://0.0.0.0:8002",
+    "filters": [{
+      "type": "read",
+      "name": "tcp_proxy",
+      "config": {
+        "stat_prefix": "database",
+        "route_config": {
+          "routes": [{
+            "cluster": "blog"
+          }]
+        }
+      }
+    }],
+    "ssl_context": {
+      "cert_chain_file": "/certs/svid.pem",
+      "private_key_file": "/certs/svid_key.pem",
+      "ca_cert_file": "/certs/svid_bundle.pem",
+      "ecdh_curves": "X25519:P-256:P-521:P-384",
+      "verify_subject_alt_name": [
+        "spiffe://example.org/Blog"
+      ]}
+  }],
+  "admin": {
+    "access_log_path": "/tmp/admin_access.log",
+    "address": "tcp://0.0.0.0:9901"
+  },
+  "cluster_manager": {
+    "clusters": [{
+      "name": "blog",
+      "connect_timeout_ms": 250,
+      "type": "strict_dns",
+      "lb_type": "round_robin",
+      "hosts": [{
+        "url": "tcp://10.70.0.10:8001"
+      }]
+    }]
+  }
+}
