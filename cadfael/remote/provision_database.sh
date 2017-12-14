@@ -22,6 +22,7 @@ set_hostname database
 
 apt_get_wrapper update
 apt_get_wrapper install mariadb-server
+apt_get_wrapper install python-pip
 
 # wipe any exsting DB config
 cat <<_EOF | sudo mysql || true
@@ -43,3 +44,8 @@ cat /tmp/remote/forum_db.dump | sudo mysql forum_db
 /tmp/remote/install_envoy.sh
 /tmp/remote/install_sidecar.sh
 
+
+sudo cp /tmp/remote/hot-restarter.py /opt/sidecar/bin/
+sudo cp /tmp/remote/start_envoy.sh /opt/sidecar/bin/
+sudo cp /tmp/remote/sidecar_config.hcl /opt/sidecar/bin/
+sudo cp /tmp/remote/database_envoy.json /opt/sidecar/bin/envoy.json

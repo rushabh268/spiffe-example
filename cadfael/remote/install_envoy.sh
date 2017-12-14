@@ -11,4 +11,3 @@ curl --silent --location --output /tmp/envoy.gz $ENVOY_GZ
 gunzip -f /tmp/envoy.gz
 chmod a+rx /tmp/envoy
 sudo mv /tmp/envoy /opt/envoy/bin/
-

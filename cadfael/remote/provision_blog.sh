@@ -25,3 +25,7 @@ cp /tmp/remote/flaskbb.cfg .
 /tmp/remote/install_sidecar.sh
 /tmp/remote/install_envoy.sh
 
+sudo cp /tmp/remote/hot-restarter.py /opt/sidecar/bin/
+sudo cp /tmp/remote/start_envoy.sh /opt/sidecar/bin/
+sudo cp /tmp/remote/sidecar_config.hcl /opt/sidecar/bin/
+sudo cp /tmp/remote/blog_envoy.json /opt/sidecar/bin/envoy.json
