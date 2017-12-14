@@ -22,6 +22,7 @@ set_hostname database
 
 apt_get_wrapper update
 apt_get_wrapper install mariadb-server
+apt_get_wrapper install python-pip
 
 # wipe any exsting DB config
 cat <<_EOF | sudo mysql || true
