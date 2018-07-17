@@ -2,12 +2,12 @@
 
 $kubernetes_version = "1.7.5"
 
-$master_ip = "192.168.0.10"
+$master_ip = "10.90.0.10"
 $master_name = "k8s-master"
 $master_ram = 2048
 
 $node_num = 1
-$node_ip = "192.168.0.11"
+$node_ip = "10.90.0.100"
 $node_name = "k8s-node"
 $node_ram = 2048
 
