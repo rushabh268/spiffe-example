@@ -1,4 +1,4 @@
 .PHONY: buid
 
 build:
-	docker-compose build
+	docker build < Dockerfile
