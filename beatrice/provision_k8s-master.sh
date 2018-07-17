@@ -13,8 +13,8 @@ sudo docker push localhost/spiffe/blog
 sudo docker build -t localhost/spiffe/ghostunnel:latest /extra_mount/blog/container_ghostunnel
 sudo docker push localhost/spiffe/ghostunnel
 
-kubectl delete -f /extra_mount/blog/blog.yaml || true
-kubectl create -f /extra_mount/blog/blog.yaml
+sudo kubectl delete -f /extra_mount/blog/blog.yaml || true
+sudo kubectl create -f /extra_mount/blog/blog.yaml
 
 # install and start spire-server
 /extra_mount/install_spire.sh server
