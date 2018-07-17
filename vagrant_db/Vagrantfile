@@ -1,6 +1,6 @@
 # vi:syntax=ruby
 
-$db_ip = "192.168.0.20"
+$db_ip = "10.90.0.20"
 $db_name = "db"
 $db_ram = 512
 
