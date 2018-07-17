@@ -1,15 +1,15 @@
 # vi:syntax=ruby
 
-$kubernetes_version = "1.7.5"
+$kubernetes_version = "1.11.0"
 
-$master_ip = "10.90.0.10"
+$master_ip = "192.168.0.10"
 $master_name = "k8s-master"
-$master_ram = 1024
+$master_ram = 2048
 
 $node_num = 1
-$node_ip = "10.90.0.100"
+$node_ip = "192.168.0.11"
 $node_name = "k8s-node"
-$node_ram = 1024
+$node_ram = 2048
 
 $node_ip_abc = $node_ip.split('.')[0..2].join('.') + '.'
 $node_ip_d = $node_ip.split('.')[3].to_i - 1
@@ -51,13 +51,13 @@ sudo kubeadm init \
 	--token=nogood.choiceforasecret \
 	--apiserver-advertise-address=#{$master_ip}
 
-mkdir -p /home/ubuntu/.kube
-sudo cp /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
-sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
+sudo mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-export KUBECONFIG=/home/ubuntu/.kube/config
-kubectl apply --filename=/vagrant/flannel.yaml
-kubectl apply --filename=/vagrant/registry.yaml
+export KUBECONFIG=$HOME/.kube/config
+sudo kubectl apply --filename=/vagrant/flannel.yaml
+sudo kubectl apply --filename=/vagrant/registry.yaml
 
 for n in $(find /extra_mount -name provision_$vm_name\*.sh 2>/dev/null); do
     source $n
