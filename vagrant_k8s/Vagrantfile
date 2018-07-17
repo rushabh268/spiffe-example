@@ -1,6 +1,6 @@
 # vi:syntax=ruby
 
-$kubernetes_version = "1.11.0"
+$kubernetes_version = "1.7.5"
 
 $master_ip = "192.168.0.10"
 $master_name = "k8s-master"
