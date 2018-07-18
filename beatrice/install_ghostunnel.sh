@@ -12,15 +12,15 @@ sudo apt-get -y install build-essential libltdl-dev git
 #export PATH=/usr/local/go/bin:/home/ubuntu/go/bin:$PATH
 # ghostunnel requires golang1.9, so we fetch a tarball
 
-curl $GOLANG_URL | sudo tar --directory /usr/local -xzf -
+curl --silent $GOLANG_URL | sudo tar --directory /usr/local -xzf -
 
 export GOROOT=/usr/local/go
 export GOPATH=/home/vagrant/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 sudo rm -rf /home/vagrant/go
 sudo mkdir -p /home/vagrant/go/src/github.com/spiffe
+sudo chown -R vagrant:vagrant /home/vagrant/go
 cd /home/vagrant/go/src/github.com/spiffe
-go get ./.
 sudo git clone --branch $GHOSTUNNEL_BRANCH  https://github.com/spiffe/ghostunnel.git
 cd ghostunnel
 go install
