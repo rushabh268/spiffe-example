@@ -1,22 +1,20 @@
-# Dockerfile for squareup/ghostunnel, useful as a basis for other images.
-#
-# To build this image:
-#     docker build -t squareup/ghostunnel .
-#
-# To run ghostunnel from the image (for example):
-#     docker run --rm squareup/ghostunnel ghostunnel --version
+FROM ubuntu:xenial
 
-FROM golang:alpine
+LABEL Description="SPIRE Demo: ghostunnel"
+LABEL vendor="scytale.io"
+LABEL version="0.1.0"
 
-MAINTAINER Cedric Staub "cs@squareup.com"
+RUN apt-get update -y
+RUN apt-get -y install \
+	git \
+	wget \
+	curl \
+	libltdl7
 
-# Copy source
-COPY . /go/src/github.com/square/ghostunnel
+WORKDIR /home/ubuntu
 
-# Build & cleanup
-RUN apk add --no-cache --update gcc musl-dev libtool && \
-    go build -o /usr/bin/ghostunnel github.com/square/ghostunnel && \
-    apk del gcc musl-dev && \
-    rm -rf /go/src/* /go/pkg/* /var/cache/apk/*
+COPY ghostunnel .
+COPY start.sh .
+RUN curl --silent --location https://github.com/spiffe/sidecar/releases/download/0.1/sidecar_0.1_linux_amd64.tar.gz | tar xzf -
 
-ENTRYPOINT ["/usr/bin/ghostunnel"]
+CMD ./start.sh
