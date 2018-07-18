@@ -5,7 +5,7 @@ Description=spire-server
 Type=simple
 User=ubuntu
 WorkingDirectory=/opt/spire
-ExecStart=/opt/spire/spire-server run
+ExecStart=/opt/spire/spire-server run -config /opt/spire/conf/server/server.conf 
 
 [Install]
 WantedBy=multi-user.target
