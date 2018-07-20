@@ -11,7 +11,7 @@ RUN apt-get -y install \
 	curl \
 	libltdl7
 
-WORKDIR /home/ubuntu
+WORKDIR /extra_mount/blog/container_ghostunnel/
 
 COPY ghostunnel .
 COPY start.sh .
