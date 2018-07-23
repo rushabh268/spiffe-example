@@ -39,9 +39,9 @@ sudo apt-get install -y \
 sudo apt-get install -y docker.io
 
 sudo usermod --append --groups docker ubuntu
-_SCRIPT
+#_SCRIPT
 
-$setup_master = <<_SCRIPT
+#$setup_master = <<_SCRIPT
 #{$setup_all}
 
 sudo kubeadm reset || true
@@ -57,7 +57,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 export KUBECONFIG=$HOME/.kube/config
 sudo kubectl apply --filename=/vagrant/flannel.yaml
-sudo kubectl apply --filename=/vagrant/registry.yaml
+#sudo kubectl apply --filename=/vagrant/registry.yaml
 
 for n in $(find /extra_mount -name provision_$vm_name\*.sh 2>/dev/null); do
     source $n
@@ -75,7 +75,12 @@ sudo kubeadm join \
 for n in $(find /extra_mount -name provision_${vm_name%-*}\*.sh 2>/dev/null); do
     source $n
 done
+
 _SCRIPT
+
+
+$setup_master = <<_SCRIPT
+#{$setup_all}
 
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/xenial64"

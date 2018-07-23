@@ -2,6 +2,7 @@
 
 set -x
 
+sudo kubectl apply --filename=/extra_mount/registry.yaml
 # wait for registry to become available
 while ! curl --silent --fail --output /dev/null localhost; do
 	sleep 1
