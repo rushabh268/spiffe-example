@@ -26,8 +26,3 @@ sudo chown vagrant:vagrant /home/vagrant/*
 /extra_mount/install_spire.sh server
 /extra_mount/install_spire.sh agent
 
-# drop user into /opt/spire dir
-#echo "cd /opt/spire" >> /home/ubuntu/.bashrc
-
-#curl --silent --fail --output /dev/null localhost
-
