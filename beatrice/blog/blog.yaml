@@ -32,13 +32,10 @@ spec:
         version: v0
     spec:
       serviceAccountName: blog-sa
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
-          operator: Exists
       containers:
       - name: ghostunnel
         image: localhost/spiffe/ghostunnel:latest
+        imagePullPolicy: Never
         resources:
           limits:
             cpu: 50m
@@ -62,6 +59,7 @@ spec:
           protocol: TCP
       - name: blog
         image: localhost/spiffe/blog:latest
+        imagePullPolicy: Never
         resources:
           limits:
             cpu: 50m
