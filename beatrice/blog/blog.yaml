@@ -39,6 +39,7 @@ spec:
       containers:
       - name: ghostunnel
         image: localhost/spiffe/ghostunnel:latest
+        imagePullPolicy: Never
         resources:
           limits:
             cpu: 50m
@@ -62,6 +63,7 @@ spec:
           protocol: TCP
       - name: blog
         image: localhost/spiffe/blog:latest
+        imagePullPolicy: Never
         resources:
           limits:
             cpu: 50m

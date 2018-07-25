@@ -39,9 +39,9 @@ sudo apt-get install -y \
 sudo apt-get install -y docker.io
 
 sudo usermod --append --groups docker ubuntu
-_SCRIPT
+#_SCRIPT
 
-$setup_master = <<_SCRIPT
+#$setup_master = <<_SCRIPT
 #{$setup_all}
 
 sudo kubeadm reset || true
@@ -56,41 +56,37 @@ sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 export KUBECONFIG=$HOME/.kube/config
-#sudo kubectl apply --filename=/vagrant/flannel.yaml
+sudo kubectl apply --filename=/vagrant/flannel.yaml
 #sudo kubectl apply --filename=/vagrant/registry.yaml
 
-for n in $(find /extra_mount -name provision_$vm_name\*.sh 2>/dev/null); do
-    source $n
-done
+#for n in $(find /extra_mount -name provision_$vm_name\*.sh 2>/dev/null); do
+#    source $n
+#done
+
 _SCRIPT
 
 $setup_node = <<_SCRIPT
 #{$setup_all}
-
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
-        sudo apt-key add -
-echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | \
-        sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-sudo apt-get update
-sudo apt-get install -y \
-        kubelet=#{$kubernetes_version}-00 \
-        kubeadm=#{$kubernetes_version}-00 \
-        kubectl=#{$kubernetes_version}-00
-sudo apt-get install -y docker.io
-sudo usermod --append --groups docker ubuntu
 
 sudo kubeadm reset || true
 sudo kubeadm join \
 	--token=nogood.choiceforasecret \
 	#{$master_ip}:6443
 	
-
 for n in $(find /extra_mount -name provision_${vm_name%-*}\*.sh 2>/dev/null); do
     source $n
 done
-_SCRIPT
 
+
+
+$setup_master = <<_SCRIPT
+#{$setup_all}
+
+for n in $(find /extra_mount -name provision_$vm_name\*.sh 2>/dev/null); do
+    source $n
+done
+
+_SCRIPT
 
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/xenial64"
@@ -140,3 +136,4 @@ Vagrant.configure("2") do |config|
 		end
 	end
 end
+
