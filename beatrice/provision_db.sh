@@ -25,7 +25,7 @@ cat /extra_mount/blog/forum_db.dump | sudo mysql forum_db
 /extra_mount/install_ghostunnel.sh
 
 # install sidecar
-#/extra_mount/install_sidecar.sh
+/extra_mount/install_sidecar.sh
 
 # drop user into /opt/spire dir
 #echo "cd /opt/spire" >> /home/ubuntu/.bashrc

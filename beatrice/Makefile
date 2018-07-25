@@ -2,8 +2,8 @@
 build: up
 
 up:
+	cd ../vagrant_k8s && VM_EXTRA_MOUNT=../beatrice vagrant up
 	cd ../vagrant_db && VM_EXTRA_MOUNT=../beatrice vagrant up
-	cd ../vagrant_k8s && VM_EXTRA_MOUNT=../beatrice vagrant up       
 
 halt:
 	cd ../vagrant_db && VM_EXTRA_MOUNT=../beatrice vagrant halt
