@@ -1,4 +1,4 @@
-# Kubernetes Workload Attestation Demo
+# Kubernetes Workload Attestation Demo with Bare metal VMs
 
 This demo shows two workloads communicating over Ghostunnel authenticated with SVIDs.
 
