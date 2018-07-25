@@ -18,6 +18,7 @@ sudo kubectl create -f /extra_mount/blog/blog.yaml
 
 # install and start spire-server
 /extra_mount/install_spire.sh server
+/extra_mount/install_spire.sh agent
 
 # drop user into /opt/spire dir
 #echo "cd /opt/spire" >> /home/ubuntu/.bashrc

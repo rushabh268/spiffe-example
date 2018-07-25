@@ -26,8 +26,8 @@ cd ghostunnel
 go install
 
 # send a copy to our container friend
+sudo rm -rf /extra_mount/blog/container_ghostunnel/ghostunnel
 sudo cp -r /home/vagrant/go/src/github.com/spiffe/ghostunnel /extra_mount/blog/container_ghostunnel/
 
 # abusing .bash_aliases to ammend PATH, for convenience
 #sudo echo "export PATH=/usr/local/go/bin:/home/ubuntu/go/bin:$PATH" > /home/ubuntu/.bash_aliases
-
