@@ -22,6 +22,10 @@ spec:
         kubernetes.io/cluster-service: "true"
     spec:
       nodeName: k8s-master
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       containers:
       - name: registry
         image: registry:2.5.1
@@ -91,6 +95,9 @@ spec:
       nodeSelector:
         beta.kubernetes.io/arch: amd64
       tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
