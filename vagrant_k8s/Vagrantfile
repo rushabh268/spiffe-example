@@ -36,7 +36,18 @@ sudo apt-get install -y \
 	kubelet=#{$kubernetes_version}-00 \
 	kubeadm=#{$kubernetes_version}-00 \
 	kubectl=#{$kubernetes_version}-00
-sudo apt-get install -y docker.io
+sudo add-apt-repository \
+       "deb https://apt.dockerproject.org/repo/ \
+       ubuntu-$(lsb_release -cs) \
+       main"
+       
+#Update packages
+sudo apt-get update
+
+#Install Packages 
+
+sudo apt-get --allow-unauthenticated -y install docker-engine
+#sudo apt-get install -y docker
 
 sudo usermod --append --groups docker ubuntu
 _SCRIPT
@@ -77,7 +88,18 @@ sudo apt-get install -y \
         kubelet=#{$kubernetes_version}-00 \
         kubeadm=#{$kubernetes_version}-00 \
         kubectl=#{$kubernetes_version}-00
-sudo apt-get install -y docker.io
+sudo add-apt-repository \
+       "deb https://apt.dockerproject.org/repo/ \
+       ubuntu-$(lsb_release -cs) \
+       main"
+
+#Update packages
+sudo apt-get update
+
+#Install Packages
+
+sudo apt-get --allow-unauthenticated -y install docker-engine
+#sudo apt-get install -y docker.io
 sudo usermod --append --groups docker ubuntu
 
 sudo kubeadm reset || true
